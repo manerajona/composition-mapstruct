@@ -1,0 +1,206 @@
+openapi: 3.0.2
+info:
+  title: Orders API
+  description: 'API to manage Orders'
+  version: 1.0.0
+tags:
+  - name: Orders
+    description: Orders placed by Consumers
+paths:
+  /orders:
+    post:
+      tags:
+        - Create Order
+      summary: Create a new Order
+      operationId: createOrder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRequest'
+      responses:
+        201:
+          description: Order created
+        400:
+          description: Malformed syntax of the request params
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+              example:
+                code: BAD_REQUEST
+                detail: Wrong value in request body.
+        500:
+          description: Server encountered an unespected problem
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+              example:
+                code: INTERNAL_ERROR
+                detail: There was an error on the server and the request could not be completed.
+  /orders/{id}:
+    get:
+      tags:
+        - Find an Order
+      summary: Returns information about the Order
+      operationId: getOrder
+      parameters:
+        - in: path
+          name: id
+          allowEmptyValue: false
+          description: Order guid
+          required: true
+          schema:
+            type: string
+            format: string
+      responses:
+        200:
+          description: Order's information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+        400:
+          description: Malformed syntax of the request params
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+              example:
+                code: BAD_REQUEST
+                detail: Wrong value in request parameter.
+        404:
+          description: The requested resource doesn't exists or was removed
+        500:
+          description: Server encountered an unespected problem
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+              example:
+                code: INTERNAL_ERROR
+                detail: There was an error on the server and the request could not be completed.
+components:
+  schemas:
+    OrderRequest:
+      description: New Order from Consumer
+      type: object
+      properties:
+        notes:
+          description: Notes from customer
+          type: string
+          format: string
+        orderItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItemRequest'
+        consumer:
+            $ref: '#/components/schemas/ConsumerRequest'
+    OrderItemRequest:
+      description: Item in the Order
+      type: object
+      properties:
+        name:
+          description: Item name
+          type: string
+          format: string
+        quantity:
+          description: Item quantity
+          type: integer
+          format: int32
+    ConsumerRequest:
+      description: Consumer information
+      type: object
+      properties:
+        name:
+          description: Consumer name
+          type: string
+          format: string
+        address:
+          description: Consumer address
+          type: string
+          format: string
+        phone:
+          description: Consumer's phone number
+          type: string
+          format: string
+    OrderResponse:
+      description: New Order from Consumer
+      type: object
+      properties:
+        id:
+          description: guid
+          type: string
+          format: string
+        state:
+          description: Order's state
+          type: string
+          format: string
+        notes:
+          description: Notes from customer
+          type: string
+          format: string
+        orderItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItemResponse'
+        consumer:
+          $ref: '#/components/schemas/ConsumerResponse'
+    OrderItemResponse:
+      description: Item in the Order
+      type: object
+      properties:
+        name:
+          description: Item name
+          type: string
+          format: string
+        quantity:
+          description: Item quantity
+          type: integer
+          format: int32
+    ConsumerResponse:
+      description: Consumer information
+      type: object
+      properties:
+        name:
+          description: Consumer name
+          type: string
+          format: string
+        address:
+          description: Consumer address
+          type: string
+          format: string
+        phone:
+          description: Consumer's phone number
+          type: string
+          format: string
+    ErrorDetails:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int64
+          description: Application error code.
+          example: 10404
+        detail:
+          type: string
+          format: string
+          description: A short, summary of the problem type
+          example: "The resource 1 was not found."
+        field:
+          type: string
+          format: string
+          description: The field that caused the error. If the field is in the body, set this value to the JSON pointer to that field.
+          example: "$ref: #/id"
+        value:
+          type: string
+          format: object
+          description: The value of the field that caused the error.
+          example: "1"
+        location:
+          type: string
+          format: string
+          description: The location of the field that caused the error. Value is `BODY`, `PATH`, `QUERY` or `HEADER`.
+          example: "PATH"
