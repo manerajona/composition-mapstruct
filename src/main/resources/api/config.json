@@ -1,0 +1,9 @@
+{
+  "modelPackage": "com.manerajona.composition.rs.dto",
+  "apiPackage": "com.manerajona.composition.rs.api",
+  "dateLibrary": "java17",
+  "useBeanValidation": true,
+  "interfaceOnly": true,
+  "useOptional": true,
+  "library": "spring-boot"
+}
