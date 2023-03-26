@@ -2,10 +2,9 @@ package com.manerajona.composition.rs.controller;
 
 import com.manerajona.composition.core.OrderService;
 import com.manerajona.composition.core.domain.Order;
-import com.manerajona.composition.rs.api.OrdersApi;
-import com.manerajona.composition.rs.dto.OrderRequest;
-import com.manerajona.composition.rs.dto.OrderResponse;
 import com.manerajona.composition.rs.mapper.OrderControllerMapper;
+import com.manerajona.composition.rs.model.OrderRequest;
+import com.manerajona.composition.rs.model.OrderResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
